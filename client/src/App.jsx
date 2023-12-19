@@ -1,5 +1,5 @@
+import React, { useState } from "react";
 import axios from "axios";
-import { useState } from "react";
 import "./App.css";
 
 const App = () => {
@@ -8,6 +8,7 @@ const App = () => {
     age: "",
     selectedBatch: "",
   });
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -19,15 +20,32 @@ const App = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3001/enroll",
-        formData
-      );
-      console.log(response.data); // Log the API response
+      const response = await axios.post("/enroll", formData);
+
+      // Assuming the backend response indicates successful payment
+      if (response.data.message === "Enrollment and payment successful") {
+        setPaymentSuccess(true);
+      } else {
+        console.log(response.data); // Log the API response for other cases
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
+
+  if (paymentSuccess) {
+    // Render a success page with user information
+    return (
+      <div>
+        <h1>Payment Successful</h1>
+        <p>Name: {formData.name}</p>
+        <p>Age: {formData.age}</p>
+        <p>Selected Batch: {formData.selectedBatch}</p>
+        <p>Date: {new Date().toLocaleDateString()}</p>
+        {/* Add any additional information you want to display */}
+      </div>
+    );
+  }
 
   return (
     <div>
