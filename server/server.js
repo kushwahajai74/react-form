@@ -3,14 +3,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const User = require("./model/userMOdel");
 
 const { config } = require("dotenv");
 const connectDB = require("./config/dbConfig");
+const User = require("./model/userModel");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-console.log(process.env.MONGO_URI);
 
 config({
   path: "./config/config.env",
