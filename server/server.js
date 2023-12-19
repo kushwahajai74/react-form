@@ -10,6 +10,7 @@ const connectDB = require("./config/dbConfig");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+console.log(process.env.MONGO_URI);
 
 config({
   path: "./config/config.env",
