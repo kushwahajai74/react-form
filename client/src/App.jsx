@@ -1,35 +1,78 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// App.js
 
-function App() {
-  const [count, setCount] = useState(0)
+import React, { useState } from "react";
+import axios from "axios";
+
+const App = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    age: "",
+    selectedBatch: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/enroll",
+        formData
+      );
+      console.log(response.data); // Log the API response
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Yoga Class Admission Form</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Age:
+          <input
+            type="number"
+            name="age"
+            value={formData.age}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Select Batch:
+          <select
+            name="selectedBatch"
+            value={formData.selectedBatch}
+            onChange={handleChange}
+          >
+            <option value="">Select Batch</option>
+            <option value="6-7AM">6-7AM</option>
+            <option value="7-8AM">7-8AM</option>
+            <option value="8-9AM">8-9AM</option>
+            <option value="5-6PM">5-6PM</option>
+          </select>
+        </label>
+        <br />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+};
 
-export default App
+export default App;
